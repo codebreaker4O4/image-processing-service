@@ -1,0 +1,17 @@
+<h2>Image Dashboard</h2>
+<img src="{{ url_for('image.serve_image', filename=filename) }}" width="300" />
+<br />
+
+<form
+  action="{{ url_for('image.transform_image', filename=filename)}}"
+  method="POST"
+>
+  <label>Resize Width</label>
+  <input type="number" name="width" />
+  <label>Resize Height</label>
+  <input type="number" name="height" />
+  <label>Rotate Angle</label>
+  <input type="number" name="angle" />
+  <button type="submit">Apply Transform</button>
+</form>
+<a href="/upload">Upload Another</a> | <a href="/auth/logout">Logout</a>
