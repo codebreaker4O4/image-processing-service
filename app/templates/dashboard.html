@@ -1,17 +1,26 @@
+{% extends "base.html" %} {% block title %}Image Dashboard{% endblock %} {%
+block content %}
 <h2>Image Dashboard</h2>
-<img src="{{ url_for('image.serve_image', filename=filename) }}" width="300" />
-<br />
-
+<img src="{{ image_url }}" width="300" />
 <form
   action="{{ url_for('image.transform_image', filename=filename)}}"
   method="POST"
+  class="mt-3"
 >
-  <label>Resize Width</label>
-  <input type="number" name="width" />
-  <label>Resize Height</label>
-  <input type="number" name="height" />
-  <label>Rotate Angle</label>
-  <input type="number" name="angle" />
-  <button type="submit">Apply Transform</button>
+  <div class="row">
+    <div class="col">
+      <label>Resize Width</label>
+      <input type="number" name="width" class="form-control" />
+    </div>
+    <div class="col">
+      <label>Resize Height</label>
+      <input type="number" name="height" class="form-control" />
+    </div>
+    <div class="col">
+      <label>Rotate Angle</label>
+      <input type="number" name="angle" class="form-control" />
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary mt-3">Apply Transform</button>
 </form>
-<a href="/upload">Upload Another</a> | <a href="/auth/logout">Logout</a>
+{% endblock %}

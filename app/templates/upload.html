@@ -1,6 +1,16 @@
+{% extends "base.html" %} {% block title %}Upload Image{% endblock %} {% block
+content %}
 <h2>Upload Image</h2>
 <form method="POST" enctype="multipart/form-data">
-  <input type="file" name="image" accept="image" required />
-  <button type="submit">Upload</button>
+  <div class="mb-3">
+    <input
+      type="file"
+      name="image"
+      accept="image/*"
+      class="form-control"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-success">Upload</button>
 </form>
-<a href="/auth/logout">Logout</a>
+{% endblock %}
