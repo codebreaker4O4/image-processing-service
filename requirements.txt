@@ -1,2 +1,5 @@
-flask
-pillow
+Flask==2.3.3
+python-dotenv==1.0.0
+azure-storage-blob==12.19.0
+Pillow==10.0.1
+Werkzeug==2.3.7
