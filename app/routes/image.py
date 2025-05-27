@@ -1,3 +1,4 @@
+from fileinput import filename
 from math import e
 import os
 import io
@@ -76,10 +77,10 @@ def transform_image():
         new_image_url = get_image_url(new_filename)
         session['current_image'] = new_filename
         flash("Image transformed successfully!", "success")
-        return render_template("dashboard.html", filename=new_filename, image_url=new_image_url, original_ename=session.get('original_filename'))
+        return render_template("dashboard.html", filename=new_filename, image_url=new_image_url, original_name=session.get('original_filename'))
 
     except Exception as e:
-        flash("Failed to transform image: {str(e)}", "error")
+        flash(f"Failed to transform image: {str(e)}", "error")
         return redirect(url_for("image.dashboard"))
 
 
@@ -153,18 +154,34 @@ def delete_image():
     if "user" not in session:
         return redirect(url_for("auth.login"))
     
-    current_image = session.get("current_image")
+    filename_to_delete = request.form.get("filename")
+    if filename_to_delete:
+        if not filename_to_delete.startswith(get_user_prefix()):
+            flash("Unauthorized access to delete this image.", "error")
+            return redirect(url_for("image.gallery"))
+        current_image = filename_to_delete
+    else:
+        current_image = session.get("current_image")
+        
+    
     if not current_image:
         flash("No image to delete.", "error")
         return redirect(url_for("image.upload_image"))
     
     try:
         delete_image_from_azure(current_image)
-        session.pop('current_image', None)
-        session.pop('original_filename', None)
         
+        #If deleting current image, clear session
+        if current_image == session.get('current_image'):
+            session.pop('current_image', None)
+            session.pop('original_filename', None)
+        # Redirect to gallery or upload page
         flash("Image deleted successfully!", "success")
-        return redirect(url_for("image.upload_image"))
+        
+        if filename_to_delete:
+            return redirect(url_for("image.gallery"))
+        else:
+            return redirect(url_for("image.upload_image"))
     
     except Exception as e:
         flash(f"Failed to delete image: {str(e)}", "error")

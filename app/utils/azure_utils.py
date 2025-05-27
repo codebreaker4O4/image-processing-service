@@ -115,7 +115,7 @@ def transform_image_in_cloud(filename, width=None, height=None, angle=0):
             pil_image = pil_image.rotate(angle, expand=True,fillcolor='white')  
             
 
-        base_name = filename.rspilt('.', 1)[0]
+        base_name = filename.rsplit('.', 1)[0]
         extension = filename.rsplit('.', 1)[-1].lower() if '.' in filename else 'jpg'
         
         new_filename = f"{base_name}_transformed_{uuid.uuid4().hex[:8]}.{extension}"
