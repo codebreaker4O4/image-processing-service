@@ -10,7 +10,16 @@ blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_CON
 container_client = blob_service_client.get_container_client(AZURE_CONTAINER_NAME)
 
 def upload_image_to_azure(image_stream, filename, content_type):
-    unique_filename = f"{uuid.uuid4()}_{filename}"
+    if not filename.startswith('user_'):
+        unique_filename = f"{uuid.uuid4()}_{filename}"
+    else:
+        parts = filename.split('_', 2)
+        if len(parts) >=3:
+            user_part = f"{parts[0]}_{parts[1]}"
+            original_filename = parts[2]
+            unique_filename = f"{user_part}_{uuid.uuid4()}_{original_filename}"
+        else:
+            unique_filename = f"{uuid.uuid4()}_{filename}"
     blob_client = container_client.get_blob_client(unique_filename)
     blob_client.upload_blob(
         image_stream, 
